@@ -117,15 +117,13 @@ export class AppComponent {
   isNamePristine$ = this.formControls.name.events.pipe(
     filter((e) => e instanceof PristineChangeEvent),
     map((e) => e as PristineChangeEvent),
-    map((e) => e.pristine),
-    map((pristine) => pristine ? 'black' : 'blue'),
+    map(({ pristine }) => pristine ? 'black' : 'blue'),
   )
 
   isNameTouched$ = this.formControls.name.events.pipe(
     filter((e) => e instanceof TouchedChangeEvent),
     map((e) => e as TouchedChangeEvent),
-    map((e) => e.touched),
-    map((touched) => touched ? 'bold' : 'normal'),
+    map(({ touched }) => touched ? 'bold' : 'normal'),
   )  
 
   fields$ = combineLatest([
@@ -139,9 +137,10 @@ export class AppComponent {
     .pipe(
       map((validArray) => {
         const completed = validArray.reduce((acc, item) => acc + item);
+        const percentage = ((completed / validArray.length) * 100).toFixed(2);
         return {
           completed,
-          percentage: ((completed / validArray.length) * 100).toFixed(2)
+          percentage,
         }
       }),
     );
