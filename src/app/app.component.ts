@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, VERSION } from '@angular/core';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { FormControl, FormGroup, FormResetEvent, FormSubmittedEvent, PristineChangeEvent, ReactiveFormsModule, TouchedChangeEvent, Validators } from '@angular/forms';
 import { CompanyAddressComponent } from './company-address/company-address.component';
-import { countTotalFields, makeRequiredControl } from './reactive-form.util';
+import { makeRequiredControl } from './reactive-form.util';
 import { combineLatest, filter, map, scan, Subject } from 'rxjs';
 import { controlStatus } from './control-status.operator';
 
@@ -101,7 +101,6 @@ export class AppComponent {
     })
   });
 
-  numFields = countTotalFields(this.formGroup);
   formSubmit = new Subject<void>();
 
   formControls = this.formGroup.controls;
@@ -142,7 +141,7 @@ export class AppComponent {
         const completed = validArray.reduce((acc, item) => acc + item);
         return {
           completed,
-          percentage: ((completed / this.numFields) * 100).toFixed(2)
+          percentage: ((completed / validArray.length) * 100).toFixed(2)
         }
       }),
     );
